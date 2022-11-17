@@ -4,25 +4,27 @@ import axios from "axios";
 
 import { Link } from "react-router-dom";
 
-const Characters = () => {
+const Characters = ({ title }) => {
+  //console.log("title==>", title);
   const [data, setData] = useState();
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchData = async () => {
-    try {
-      const response = await axios.get("http://localhost:3200/characters"); // j'interroge la route characters en local sur leport 3200
-
-      //console.log("response.data ==> ", response.data);
-      setData(response.data);
-      setIsLoading(false);
-    } catch (error) {
-      console.log(error.response.data);
-    }
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3200/characters?title=${title}`
+        ); // j'interroge la route characters en local sur leport 3200
+
+        console.log("response.data ==> ", response.data);
+        setData(response.data);
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error.response.data);
+      }
+    };
     fetchData();
-  }, []);
+  }, [title]);
 
   return isLoading ? (
     <p>Loading ...</p>

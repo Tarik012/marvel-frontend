@@ -22,9 +22,8 @@ a {
 /*HEADER*/
 .header-container {
   display: flex;
-  flex-direction: column;
   text-align: center;
-  justify-content: center;
+  justify-content: flex-start;
 }
 
 .header-container ul {
@@ -32,6 +31,21 @@ a {
   text-align: center;
   justify-content: center;
   gap: 20px;
+}
+
+.logo-nav-container {
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30%;
+}
+
+.search-container input {
+  width: 300px;
+  border-radius: 5px;
 }
 
 /*LOGO*/

@@ -16,7 +16,7 @@ const ComicsByCharacter = () => {
           `http://localhost:3200/comics/${characterId}`
         ); // j'interroge la route comics en local sur le port 3200 lpour les comics en fonction de l'id du character
 
-        console.log("response.data ==> ", response.data);
+        //console.log("response.data ==> ", response.data);
         setData(response.data);
         setIsLoading(false);
       } catch (error) {
