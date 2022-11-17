@@ -2,25 +2,26 @@ import { useEffect, useState } from "react";
 
 import axios from "axios";
 
-const Comics = () => {
+const Comics = ({ title }) => {
   const [data, setData] = useState();
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchData = async () => {
-    try {
-      const response = await axios.get("http://localhost:3200/comics"); // j'interroge la route characters en local sur leport 3200
-
-      //console.log("response.data ==> ", response.data);
-      setData(response.data);
-      setIsLoading(false);
-    } catch (error) {
-      console.log(error.response.data);
-    }
-  };
-
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `http://localhost:3200/comics?title=${title}`
+        ); // j'interroge la route characters en local sur leport 3200
+
+        //console.log("response.data ==> ", response.data);
+        setData(response.data);
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error.response.data);
+      }
+    };
     fetchData();
-  }, []);
+  }, [title]);
 
   return isLoading ? (
     <p>Loading ...</p>

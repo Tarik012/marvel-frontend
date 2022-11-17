@@ -5,7 +5,6 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 
 const Characters = ({ title }) => {
-  //console.log("title==>", title);
   const [data, setData] = useState();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -16,7 +15,7 @@ const Characters = ({ title }) => {
           `http://localhost:3200/characters?title=${title}`
         ); // j'interroge la route characters en local sur leport 3200
 
-        console.log("response.data ==> ", response.data);
+        //console.log("response.data ==> ", response.data);
         setData(response.data);
         setIsLoading(false);
       } catch (error) {

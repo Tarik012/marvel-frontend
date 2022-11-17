@@ -12,8 +12,15 @@ import Favoris from "./pages/Favoris";
 import ComicsByCharacter from "./pages/ComicsByCharacter";
 
 function App() {
+  // Mettre dans APP et passer en props dans le composant pour passer en parametres de la requetes axios avec des &limit&skip
+  // const [skip, setSkip]= useState(100)
+  // const [limit, setLimit]= useState(0)
+  // if(skip>0)
+  // onclick setSkip(skip-limit)
+  // et inversement
+
   const [title, setTitle] = useState("");
-  console.log("title==>", title);
+  // console.log("title==>", title);
   return (
     <div className="App">
       <Router>
@@ -22,7 +29,7 @@ function App() {
         </header>
         <Routes>
           <Route path="/" element={<Characters title={title} />}></Route>
-          <Route path="/comics" element={<Comics />}></Route>
+          <Route path="/comics" element={<Comics title={title} />}></Route>
           <Route
             path="/comics/:characterId"
             element={<ComicsByCharacter />}
