@@ -4,7 +4,7 @@ import axios from "axios";
 
 import { Link } from "react-router-dom";
 
-const Characters = ({ title }) => {
+const Characters = ({ title, pagination }) => {
   const [data, setData] = useState();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -28,33 +28,37 @@ const Characters = ({ title }) => {
   return isLoading ? (
     <p>Loading ...</p>
   ) : (
-    <div className="characters-container">
-      {/*un container en flex wrap*/}
-      {data.results.map((character) => {
-        const urlPicture = `${character.thumbnail.path}.${character.thumbnail.extension}`;
-        return (
-          <Link to={`/comics/${character._id}`}>
-            <div key={character._id} className="characters-container-div">
-              <h3>{character.name}</h3>
-              <img
-                key={character._id}
-                src={urlPicture}
-                alt="describe"
-                className="characters-container-img" // des images avec une taille pour le flex-wrap
-              />
-              {character.description ? (
-                <div className="description-hidden">
-                  <p>{character.description}</p>
-                  <span>...</span>
-                </div>
-              ) : (
-                <p></p>
-              )}
-            </div>
-          </Link>
-        );
-      })}
-    </div>
+    <>
+      <div>{pagination}</div>
+
+      <div className="characters-container">
+        {/*un container en flex wrap*/}
+        {data.results.map((character) => {
+          const urlPicture = `${character.thumbnail.path}.${character.thumbnail.extension}`;
+          return (
+            <Link to={`/comics/${character._id}`}>
+              <div key={character._id} className="characters-container-div">
+                <h3>{character.name}</h3>
+                <img
+                  key={character._id}
+                  src={urlPicture}
+                  alt="describe"
+                  className="characters-container-img" // des images avec une taille pour le flex-wrap
+                />
+                {character.description ? (
+                  <div className="description-hidden">
+                    <p>{character.description}</p>
+                    <span>...</span>
+                  </div>
+                ) : (
+                  <p></p>
+                )}
+              </div>
+            </Link>
+          );
+        })}
+      </div>
+    </>
   );
 };
 
