@@ -7,7 +7,6 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import axios from "axios";
 
 import Header from "./components/Header";
-import Pagination from "./components/Pagination";
 import Blank from "./components/Blank";
 import Characters from "./pages/Characters";
 import Comics from "./pages/Comics";
@@ -16,66 +15,62 @@ import ComicsByCharacter from "./pages/ComicsByCharacter";
 
 function App() {
   const [title, setTitle] = useState("");
-  const [skip, setSkip] = useState(0);
-  const [limit, setLimit] = useState(100);
 
-  // const [currentPage, setCurrentPage] = useState(0);
-  // const [recordsPerPage] = useState(100);
-
-  const [characters, setCharacters] = useState([]);
+  const [items, setItems] = useState([]);
+  const [itemsComics, setItemsComics] = useState([]);
   const [loading, setIsLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
-  const [charactersPerPage] = useState(50);
+  const [itemsPerPage] = useState(50);
 
-  const indexOfLastCharacter =
-    currentPage === 0 ? charactersPerPage : currentPage * charactersPerPage;
-  const indexOfFirstCharacter = indexOfLastCharacter - charactersPerPage;
+  const indexOfLastItem =
+    currentPage === 0 ? itemsPerPage : currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 
+  // je mets les objets dans un tableau pour utiliser la méthode slice() afin de récupérer les items de la page
   const result = [];
+  for (var i in items) result.push([i, items[i]]);
+  const currentCharacters = result.slice(indexOfFirstItem, indexOfLastItem);
+  const nbPages = Math.ceil(items.count / itemsPerPage);
 
-  for (var i in characters) result.push([i, characters[i]]);
-
-  const currentCharacters = result.slice(
-    indexOfFirstCharacter,
-    indexOfLastCharacter
-  );
-
-  //console.log("characters=>", characters);
-
-  //console.log("currentCharacters[2]==>", currentCharacters[2]);
-
-  //console.log("currentCharacters=>", currentCharacters);
-
-  const nbPages = Math.ceil(characters.count / charactersPerPage);
-
-  const paginate = (pagenumber) => {
-    setCurrentPage(pagenumber);
-  };
+  const resultComics = [];
+  for (var j in itemsComics) resultComics.push([j, itemsComics[j]]);
+  const currentComics = resultComics.slice(indexOfFirstItem, indexOfLastItem);
+  const nbPagesComics = Math.ceil(itemsComics.count / itemsPerPage);
 
   useEffect(() => {
     const fetchCharacters = async () => {
       try {
-        // console.log(
-        //   "charactersPerPage, currentPage, title==>",
-        //   charactersPerPage,
-        //   currentPage,
-        //   title
-        // );
         const res = await axios.get(
-          `http://localhost:3200/characters?limit=${charactersPerPage}&skip=${currentPage}&title=${title}`
+          `http://localhost:3200/characters?limit=${itemsPerPage}&skip=${currentPage}&title=${title}`
         );
 
         //console.log("res.data ==> ", res.data);
-        setCharacters(res.data);
+        setItems(res.data);
         setIsLoading(false);
       } catch (error) {
         console.log(error.res.data);
       }
     };
     fetchCharacters();
-  }, [title, charactersPerPage, currentPage]);
+  }, [title, itemsPerPage, currentPage]);
 
-  // console.log("title==>", title);
+  useEffect(() => {
+    const fetchComics = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:3200/comics?limit=${itemsPerPage}&skip=${currentPage}&title=${title}`
+        );
+
+        //console.log("res.data ==> ", res.data);
+        setItemsComics(res.data);
+        setIsLoading(false);
+      } catch (error) {
+        console.log(error.res.data);
+      }
+    };
+    fetchComics();
+  }, [title, itemsPerPage, currentPage]);
+
   return (
     <div className="App">
       <Router>
@@ -87,11 +82,8 @@ function App() {
             path="/"
             element={
               <Characters
-                characters={currentCharacters[2]}
+                items={currentCharacters[2]}
                 loading={loading}
-                charactersPerPage={charactersPerPage}
-                totalCharacters={characters.count}
-                // paginate={paginate}
                 nbPages={nbPages}
                 currentPage={currentPage}
                 setCurrentPage={setCurrentPage}
@@ -102,10 +94,11 @@ function App() {
             path="/comics"
             element={
               <Comics
-                title={title}
-                pagination={<Pagination />}
-                skip={skip}
-                limit={limit}
+                items={currentComics[2]}
+                loading={loading}
+                nbPages={nbPagesComics}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
               />
             }
           ></Route>

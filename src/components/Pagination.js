@@ -1,8 +1,6 @@
 import React from "react";
 
 const Pagination = ({ nPages, currentPage, setCurrentPage }) => {
-  // const pageNumbers = [...Array(nPages + 1).keys()].slice(1);
-
   const pageNumbers = [];
 
   for (let i = 1; i <= nPages; i++) {
@@ -16,34 +14,20 @@ const Pagination = ({ nPages, currentPage, setCurrentPage }) => {
     if (currentPage !== 0) setCurrentPage(currentPage - 1);
   };
   return (
-    <nav>
-      <ul className="pagination justify-content-center">
-        <li className="page-item">
-          <a href="#" className="page-link" onClick={prevPage}>
-            Page précédente
-          </a>
-        </li>
-        {pageNumbers.map((pgNumber) => (
-          <li
-            key={pgNumber}
-            className={`page-item ${currentPage === pgNumber ? "active" : ""} `}
-          >
-            <a
-              href="#"
-              onClick={() => setCurrentPage(pgNumber)}
-              className="page-link"
-            >
-              {pgNumber}
-            </a>
-          </li>
-        ))}
-        <li className="page-item">
-          <a href="#" className="page-link" onClick={nextPage}>
-            Page suivante
-          </a>
-        </li>
-      </ul>
-    </nav>
+    <div>
+      <span onClick={prevPage}>Page précédente</span>
+      {pageNumbers.map((pgNumber, index) => (
+        <span
+          key={index}
+          active={currentPage === pgNumber}
+          disabled={isNaN(pgNumber)}
+          onClick={() => setCurrentPage(pgNumber)}
+        >
+          {pgNumber}
+        </span>
+      ))}
+      <span onClick={nextPage}>Page suivante</span>
+    </div>
   );
 };
 
