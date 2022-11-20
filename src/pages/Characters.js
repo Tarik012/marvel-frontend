@@ -1,39 +1,78 @@
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 
-import axios from "axios";
+// import axios from "axios";
 
 import { Link } from "react-router-dom";
 
-const Characters = ({ title, pagination }) => {
-  const [data, setData] = useState();
-  const [isLoading, setIsLoading] = useState(true);
+import Pagination from "../components/Pagination";
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:3200/characters?title=${title}`
-        ); // j'interroge la route characters en local sur leport 3200
+const Characters = ({
+  characters,
+  loading,
+  charactersPerPage,
+  totalCharacters,
+  paginate,
+  nbPages,
+  currentPage,
+  setCurrentPage,
+}) => {
+  //console.log("characters=>", characters);
+  // const [data, setData] = useState([]);
+  // const [isLoading, setIsLoading] = useState(true);
 
-        //console.log("response.data ==> ", response.data);
-        setData(response.data);
-        setIsLoading(false);
-      } catch (error) {
-        console.log(error.response.data);
-      }
-    };
-    fetchData();
-  }, [title]);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       console.log("limit, skip, title==>", limit, skip, title);
+  //       const response = await axios.get(
+  //         `http://localhost:3200/characters?limit=${limit}&skip=${skip}&title=${title}`
+  //       ); // j'interroge la route characters en local sur leport 3200
 
-  return isLoading ? (
+  //       //console.log("response.data ==> ", response.data);
+  //       setData(response.data);
+  //       setIsLoading(false);
+  //     } catch (error) {
+  //       console.log(error.response.data);
+  //     }
+  //   };
+  //   fetchData();
+  // }, [title, limit, skip]);
+
+  // const indexOfLastRecord = skip * limit;
+  // const indexOfFirstRecord = indexOfLastRecord - limit;
+
+  // const result = [];
+
+  // for (var i in data) result.push([i, data[i]]);
+
+  // const currentRecords = result.slice(indexOfFirstRecord, indexOfLastRecord);
+  // console.log("currentRecords=>", currentRecords);
+
+  // const nPages = Math.ceil(data.count / limit);
+
+  return loading ? (
     <p>Loading ...</p>
   ) : (
     <>
-      <div>{pagination}</div>
+      <div>
+        <Pagination
+          nPages={nbPages}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+        />
+      </div>
+      {/* <div>
+        <Pagination
+          charactersPerPage={charactersPerPage}
+          totalCharacters={totalCharacters}
+          paginate={paginate}
+        />
+      </div> */}
 
       <div className="characters-container">
         {/*un container en flex wrap*/}
-        {data.results.map((character) => {
+        {characters[1].map((character) => {
+          //console.log("character=>", character);
           const urlPicture = `${character.thumbnail.path}.${character.thumbnail.extension}`;
           return (
             <Link to={`/comics/${character._id}`}>
